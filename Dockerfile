@@ -1,6 +1,9 @@
 FROM base/archlinux
 MAINTAINER thermionix
 
+RUN curl -o /etc/pacman.d/mirrorlist "https://www.archlinux.org/mirrorlist/?country=all&use_mirror_status=on" && \
+  sed -i 's/^#//' /etc/pacman.d/mirrorlist
+
 RUN pacman-key --refresh-keys
 RUN pacman -Syu --noconfirm
 RUN pacman-db-upgrade
@@ -8,7 +11,7 @@ RUN pacman -S --needed --noconfirm supervisor base-devel
 RUN pacman -S --needed --noconfirm mono libmediainfo sqlite
 
 USER nobody
-RUN curl https://aur.archlinux.org/packages/so/sonarr/sonarr.tar.gz | tar zx -C /tmp
+RUN curl https://aur.archlinux.org/cgit/aur.git/snapshot/sonarr.tar.gz | tar zx -C /tmp
 RUN cd /tmp/sonarr ; makepkg --noconfirm
 
 USER root
